@@ -28,6 +28,21 @@
   color: #154256;
 }
 
+.screen-status {
+  display: block;
+  position: relative;
+  left: -23px;
+  font-family: arial, sans-serif;
+  font-size: 8pt;
+  font-weight: 600;
+  color: #154256;
+}
+
+.screen-status.active {
+  color: #6ac8f2;
+  font-weight: 600;
+}
+
 table {
   table-layout: fixed;
 }

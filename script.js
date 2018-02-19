@@ -327,6 +327,18 @@ function updateScreen() {
     fill = "!".repeat(emptySlots-1);
 
   screen.innerHTML = inputText + "<br />" + fill + resultText;
+
+  const rad = document.getElementById('screen-rad');
+  const deg = document.getElementById('screen-deg');
+
+  if (degrees) {
+    rad.classList.remove('active');
+    deg.classList.add('active');
+  }
+  else {
+    rad.classList.add('active');
+    deg.classList.remove('active');
+  }
 }
 
 function writeOnScreen(text) {
@@ -345,7 +357,9 @@ function writeOnScreen(text) {
 
 function execute() {
   var result = parse(inputText);
-  result = limitDecimals(result, 7);
+  if (!isNaN(result))
+    result = limitDecimals(result, 7);
+
   resultText = result.toString();
   updateScreen();
 }
@@ -410,6 +424,11 @@ function makeLowerTable() {
 
 function makeUpperTable() {
   const upperTable = document.getElementById('upper-button-table');
+
+  document.getElementById('rad-button').onclick = () => {
+    degrees = !degrees;
+    updateScreen();
+  }
 
   var tr = upperTable.rows[upperTable.rows.length - 1];
   tr.appendChild(createButton(superscript2, '^2'));

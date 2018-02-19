@@ -7,19 +7,31 @@
 </head>
 <body>
   <div>
+    <!-- The Screen -->
     <div id="screen-box">
       <div>
-        <label class="screen back">~.~.~.~.~.~.~.~.~.~.~.<br />~.~.~.~.~.~.~.~.~.~.~.</label>
-        <label id="screen" class="screen">Screen</label>
+        <!-- This background label renders all the segments in a dark color -->
+        <label class="screen back">
+          ~.~.~.~.~.~.~.~.~.~.~.<br />~.~.~.~.~.~.~.~.~.~.~.
+        </label>
+        <label id="screen" class="screen"></label>
+        <!-- These tell whether the calculator is set in radians or degrees -->
+        <label id="screen-rad" class="screen-status">RAD</label>
+        <label id="screen-deg" class="screen-status">DEG</label>
+        <!--<label id="screen-hex" class="screen-status">HEX</label>
+        <label id="screen-dec" class="screen-status">DEC</label>
+        <label id="screen-bin" class="screen-status">BIN</label>-->
       </div>
     </div>
     <div>
+      <!-- Following tables are built mostly by scripts -->
+      <!-- Smaller, function buttons -->
       <table id="upper-button-table" width="349">
         <tr>
-          <td><button>SHIFT</button></td>
-          <td><button>OPTN</button></td>
-          <td><button>VARS</button></td>
-          <td><button>MENU</button></td>
+          <td><button id="rad-button">RAD</button></td>
+          <td><button id="hex-button">HEX</button></td>
+          <td><button id="dec-button">DEC</button></td>
+          <td><button id="bin-button">BIN</button></td>
           <td id="arrows-cell" colspan="2" rowspan="2">
             <button style="margin: 0 auto 0 auto; display:block"></button>
             <button style="float: left"></button>
@@ -30,6 +42,7 @@
         <tr>
         </tr>
       </table>
+      <!-- Numpad and vital buttons -->
       <table id="lower-button-table" width="349">
       </table>
     </div>
