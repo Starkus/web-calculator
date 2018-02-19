@@ -1,0 +1,52 @@
+/* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}*/
+
+@font-face {
+  font-family: f7Segment;
+  src: url('DSEG14Modern-Italic.ttf');
+}
+
+#screen-box {
+  display: block;
+  background: #1b5772;
+  height: 71px;
+  width: 289px;
+  padding: 10px 30px 10px 30px;
+}
+
+.screen {
+  font-family: f7Segment;
+  font-size: 24pt;
+  color: #6ac8f2;
+  position: absolute;
+}
+
+.screen.back {  
+  color: #154256;
+}
+
+table {
+  table-layout: fixed;
+}
+
+table button {
+  border-style: none;
+  font-size: 12pt;
+  width: 100%;
+}
+
+#lower-button-table button {
+  height: 40px;
+}
+
+#upper-button-table button {
+  height: 30px;
+}
+
+#arrows-cell button {
+  width: 35px;
+  height: 20px;
+}
