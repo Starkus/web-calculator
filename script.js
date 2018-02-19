@@ -313,20 +313,36 @@ function parse(text) {
 }
 
 function updateScreen() {
-  var inputNofDots = inputText.length - inputText.replace(/\./g, '').length;
+  var scrInput = "";
+  var j = 0;
+  var line = 0;
+  for (i=0; i < Math.min(36, inputText.length); i++)
+  {
+    var c = inputText.charAt(i);
+    if (c != '.')
+      j++;
+
+    if (j == 13 || j == 25) {
+      scrInput += '<br />';
+      line++;
+    }
+
+    scrInput += c;
+  }
+  while (line < 2) {
+    scrInput += '<br />';
+    line++;
+  }
+
   var resultNofDots = resultText.length - resultText.replace(/\./g, '').length;
-
-  var resultLen = Math.min(12, resultText.length - resultNofDots);
-
-  inputText = inputText.slice(0, 11 + inputNofDots);
   resultText = resultText.slice(0, 11 + resultNofDots);
-  var emptySlots = 12 - resultLen;
+  var emptySlots = 13 - resultText.length - resultNofDots;
 
   var fill = "";
   if (emptySlots > 0)
     fill = "!".repeat(emptySlots-1);
 
-  screen.innerHTML = inputText + "<br />" + fill + resultText;
+  screen.innerHTML = scrInput + "<br />" + fill + resultText;
 
   const rad = document.getElementById('screen-rad');
   const deg = document.getElementById('screen-deg');

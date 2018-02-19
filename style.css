@@ -12,9 +12,9 @@
 #screen-box {
   display: block;
   background: #1b5772;
-  height: 71px;
-  width: 289px;
-  padding: 10px 30px 10px 30px;
+  height: 140px;
+  width: 316px;
+  padding: 20px 60px 20px 60px;
 }
 
 .screen {
@@ -54,11 +54,11 @@ table button {
 }
 
 #lower-button-table button {
-  height: 40px;
+  height: 50px;
 }
 
 #upper-button-table button {
-  height: 30px;
+  height: 40px;
 }
 
 #arrows-cell button {
