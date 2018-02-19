@@ -9,6 +9,17 @@
   src: url('DSEG14Modern-Italic.ttf');
 }
 
+body {
+  background-color: #414e5b;
+}
+
+#calculator-box {
+  background-color: #adaba4;
+  width: 436px;
+  padding: 30px 25px 30px 25px;
+  margin: auto;
+}
+
 #screen-box {
   display: block;
   background: #1b5772;
@@ -45,16 +56,36 @@
 
 table {
   table-layout: fixed;
+  margin: 0 -6px 0 -3px;
 }
 
 table button {
   border-style: none;
   font-size: 12pt;
   width: 100%;
+  
+  background-color: #5b5953;
+  color: white;
+}
+
+table button:hover {
+  transition: 0.2s;
+  -webkit-transition: 0.2s;
+  background-color: #848177;
 }
 
 #lower-button-table button {
-  height: 50px;
+ height: 50px;
+  background-color: #e2e1dc;
+  color: #333231;
+  font-size: 15pt;
+  font-weight: lighter;
+}
+
+#lower-button-table button:hover {
+  transition: 0.2s;
+  -webkit-transition: 0.2s;
+  background-color: #c6c5bc;
 }
 
 #upper-button-table button {
@@ -62,6 +93,6 @@ table button {
 }
 
 #arrows-cell button {
-  width: 35px;
-  height: 20px;
+  width: 38px;
+  height: 25px;
 }
