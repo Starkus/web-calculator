@@ -336,7 +336,7 @@ function updateScreen() {
 
   var resultNofDots = resultText.length - resultText.replace(/\./g, '').length;
   resultText = resultText.slice(0, 11 + resultNofDots);
-  var emptySlots = 13 - resultText.length - resultNofDots;
+  var emptySlots = 13 - resultText.length + resultNofDots;
 
   var fill = "";
   if (emptySlots > 0)

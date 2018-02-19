@@ -13,6 +13,13 @@ body {
   background-color: #414e5b;
 }
 
+h1 {
+  font-family: 'Indie Flower', sans-serif;
+  color: white;
+  text-align: center;
+  font-size: 36pt;
+}
+
 #calculator-box {
   background-color: #adaba4;
   width: 436px;
@@ -60,6 +67,7 @@ table {
 }
 
 table button {
+  font-family: 'Titillium Web', sans-serif;
   border-style: none;
   font-size: 12pt;
   width: 100%;
