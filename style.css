@@ -82,6 +82,11 @@ table button:hover {
   background-color: #848177;
 }
 
+#execute-btn {
+  background-color: #3355aa !important;
+  color: white !important;
+}
+
 #lower-button-table button {
  height: 50px;
   background-color: #e2e1dc;
