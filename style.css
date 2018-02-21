@@ -85,6 +85,7 @@ table button:hover {
 #execute-btn {
   background-color: #3355aa !important;
   color: white !important;
+  font-size: 20pt !important;
 }
 
 #lower-button-table button {

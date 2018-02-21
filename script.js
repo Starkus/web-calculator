@@ -430,11 +430,11 @@ function makeLowerTable() {
   lowerTable.appendChild(tr);
 
   tr = document.createElement('tr');
-  tr.appendChild(createSimpleButton('0'));
   tr.appendChild(createSimpleButton('.'));
+  tr.appendChild(createSimpleButton('0'));
   tr.appendChild(createSimpleButton('EXP'));
   tr.appendChild(createButton('(-)', '-'));
-  const exeBtn = createFuncButton('EXE', () => execute());
+  const exeBtn = createFuncButton('=', () => execute());
   exeBtn.childNodes[0].id = "execute-btn";
   tr.appendChild(exeBtn);
   lowerTable.appendChild(tr);
