@@ -31,7 +31,7 @@ h1 {
   display: block;
   background: #1b5772;
   height: 22vw;
-  padding: 20px 60px 20px 60px;
+  padding: 20px 0px 20px 0px;
 }
 
 #screen-anchor {
@@ -97,7 +97,7 @@ table button:hover {
 }
 
 #lower-button-table button {
-  height: calc(8vw);
+  height: 9vw;
   min-height: height: 50px;
   background-color: #e2e1dc;
   color: #333231;
@@ -117,7 +117,7 @@ table button:hover {
 
 #upper-button-table button {
   width: 100%;
-  height: calc(6vw);
+  height: 7vw;
   min-height: 36px;
 }
 
@@ -125,4 +125,26 @@ table button:hover {
   width: 25%;
   height: 4vw;
   min-height: 25px;
+}
+
+@media only screen and (min-width: 700px) {
+  #calculator-box {
+    max-width: 450px;
+  }
+  .screen {
+    font-size: 25pt;
+  }
+  #screen-box {
+    height: 150px;
+  padding: 20px 60px 20px 60px;
+  }
+  #upper-button-table button {
+    height: 50px;
+  }
+  #lower-button-table button {
+    height: 65px;
+  }
+  #arrows-cell button {
+    height: 30px;
+  }
 }
