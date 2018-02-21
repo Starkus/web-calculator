@@ -127,7 +127,7 @@ table button:hover {
   min-height: 25px;
 }
 
-@media only screen and (min-width: 700px) {
+@media (min-aspect-ratio: 8/5) {
   #calculator-box {
     max-width: 450px;
   }
