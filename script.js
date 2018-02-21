@@ -13,7 +13,7 @@ const pi = '\u03c0';
 const toRadians = 1 / 180 * Math.PI;
 const operators = ['+', minus, '*', '/', '^', '%', 'sin', 'cos', 'tan', 'log',
           'ln', sqrt, radix];
-const syntaxErrorMsg = "SyntaxError";
+const syntaxErrorMsg = "Syntax Error";
 const mathErrorMsg = "Math Error";
 
 
@@ -370,7 +370,12 @@ function updateScreen() {
     line++;
   }
 
-  if (fraction) {
+  /* Display modes */
+  if (isNaN(result)) {
+    console.log('NaN: ' + result);
+    resultText = result;
+  }
+  else if (fraction) {
     var fr = findFraction(result);
     resultText = fr[0].toString() + ',' + fr[1].toString();
   }
@@ -380,15 +385,12 @@ function updateScreen() {
     resultText = sciNot[0].toString().slice(0,11 - e.length) + 'E' + sciNot[1].toString();
   }
   else {
-    var r = result;
-    
-    if (!isNaN(result))
-      r = limitDecimals(r, 12);
+    var r = limitDecimals(result, 12);
     resultText = r.toString();
   }
 
   var resultNofDots = resultText.length - resultText.replace(/\./g, '').length;
-  resultText = resultText.slice(0, 11 + resultNofDots);
+  resultText = resultText.slice(0, 12 + resultNofDots);
   var emptySlots = 13 - resultText.length + resultNofDots;
 
   var fill = "";
@@ -417,6 +419,12 @@ function writeOnScreen(text) {
   else if (text == 'AC') {
     inputText = "";
   }
+  else if (text == '.') {
+    // Don't put multiple consecutive dots because they'll be invincible
+    if (inputText.charAt(inputText.length-1) != '.') {
+      inputText += text;
+    }
+  }
   else {
     inputText += text;
   }
@@ -431,6 +439,7 @@ function readFromHistory() {
 
 function execute() {
   result = parse(inputText);
+  console.log(result);
 
   // Log input to history
   if (history[history.length-1] != inputText) {
