@@ -22,7 +22,7 @@ h1 {
 
 #calculator-box {
   background-color: #adaba4;
-  width: 436px;
+  width: 70%;
   padding: 30px 25px 30px 25px;
   margin: auto;
 }
@@ -30,14 +30,18 @@ h1 {
 #screen-box {
   display: block;
   background: #1b5772;
-  height: 140px;
-  width: 316px;
+  height: 22vw;
   padding: 20px 60px 20px 60px;
+}
+
+#screen-anchor {
+  margin: 0 auto 0 auto;
+  width: 49vw;
 }
 
 .screen {
   font-family: f7Segment;
-  font-size: 24pt;
+  font-size: 5vw;
   color: #6ac8f2;
   position: absolute;
 }
@@ -88,8 +92,13 @@ table button:hover {
   font-size: 20pt !important;
 }
 
+#lower-button-table {
+  width: 100%;
+}
+
 #lower-button-table button {
- height: 50px;
+  height: calc(8vw);
+  min-height: height: 50px;
   background-color: #e2e1dc;
   color: #333231;
   font-size: 15pt;
@@ -102,11 +111,18 @@ table button:hover {
   background-color: #c6c5bc;
 }
 
+#upper-button-table {
+  width: 100%;
+}
+
 #upper-button-table button {
-  height: 40px;
+  width: 100%;
+  height: calc(6vw);
+  min-height: 36px;
 }
 
 #arrows-cell button {
-  width: 38px;
-  height: 25px;
+  width: 25%;
+  height: 4vw;
+  min-height: 25px;
 }
