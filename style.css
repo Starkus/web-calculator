@@ -71,7 +71,7 @@ table {
 }
 
 table button {
-  font-family: 'Titillium Web', sans-serif;
+  font-family: 'Raleway', sans-serif;
   border-style: none;
   font-size: 12pt;
   width: 100%;
@@ -98,10 +98,10 @@ table button:hover {
 
 #lower-button-table button {
   height: 9vw;
-  min-height: height: 50px;
+  min-height: 50px;
   background-color: #e2e1dc;
   color: #333231;
-  font-size: 15pt;
+  font-size: 3.5vw;
   font-weight: lighter;
 }
 
@@ -119,6 +119,7 @@ table button:hover {
   width: 100%;
   height: 7vw;
   min-height: 36px;
+  font-size: 2.5vw;
 }
 
 #arrows-cell button {
@@ -127,7 +128,7 @@ table button:hover {
   min-height: 25px;
 }
 
-@media (min-aspect-ratio: 8/5) {
+@media (min-aspect-ratio: 8/10) {
   #calculator-box {
     max-width: 450px;
   }
@@ -136,13 +137,15 @@ table button:hover {
   }
   #screen-box {
     height: 150px;
-  padding: 20px 60px 20px 60px;
+    padding: 20px 60px 20px 60px;
   }
   #upper-button-table button {
     height: 50px;
+    font-size: 14pt;
   }
   #lower-button-table button {
     height: 65px;
+    font-size: 17pt;
   }
   #arrows-cell button {
     height: 30px;

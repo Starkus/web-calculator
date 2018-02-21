@@ -12,7 +12,7 @@ const pi = '\u03c0';
 
 const toRadians = 1 / 180 * Math.PI;
 const operators = ['+', minus, '*', '/', '^', '%', 'sin', 'cos', 'tan', 'log',
-          'ln', sqrt, radix];
+          'ln', 'asin', 'acos', 'atan', sqrt, radix];
 const syntaxErrorMsg = "Syntax Error";
 const mathErrorMsg = "Math Error";
 
@@ -22,6 +22,7 @@ let degrees = true;
 let fraction = false;
 let history = [];
 let historyIndex = 0;
+let clearOnInput = false;
 
 
 /* Math functions */
@@ -100,7 +101,7 @@ function inScientificNotation(n) {
 
 function plog(str) {
   /* Uncomment to log parsing steps. */
-  //console.log(str);
+  console.log(str);
 }
 
 function multiplyIfNoOperator(text, leftSide) {
@@ -118,12 +119,15 @@ function multiplyIfNoOperator(text, leftSide) {
     }
   }
   if (!endsInOp) {
+    console.log(text + ' doesn\'t end in operator');
     if (leftSide) {
       text = '*' + text;
     } else {
       text += '*';
     }
   }
+  else
+    console.log(text + ' ends in operator');
   return text;
 }
 
@@ -197,6 +201,18 @@ function operatorRight(text, op) {
       case 'tan':
         res = Math.tan(angle);
         break;
+      case 'asin':
+        res = Math.asin(arg);
+        if (degrees) res /= toRadians;
+        break;
+      case 'acos':
+        res = Math.acos(arg);
+        if (degrees) res /= toRadians;
+        break;
+      case 'atan':
+        res = Math.atan(arg);
+        if (degrees) res /= toRadians;
+        break;
       case 'log':
         res = Math.log(arg) / Math.LN10;
         break;
@@ -226,6 +242,9 @@ function parse(text) {
 
   /* Pi */
   text = text.replace(pi, '(' + Math.PI.toString() + ')');
+
+  /* Ans */
+  text = text.replace('Ans', '(' + result.toString() + ')');
 
   /* Parenthesis*/
   var beginIndex = text.indexOf('(');
@@ -257,31 +276,11 @@ function parse(text) {
 
         if (pre)
         {
-          var endsInOp = false;
-          for (let o of operators)
-          {
-            if (pre.endsWith(o))
-            {
-              endsInOp = true;
-              break;
-            }
-          }
-          if (!endsInOp)
-            pre += '*';
+          pre = multiplyIfNoOperator(pre, false);
         }
         if (pos)
         {
-          var endsInOp = false;
-          for (let o of operators)
-          {
-            if (pos.startsWith(o))
-            {
-              endsInOp = false;
-              break;
-            }
-          }
-          if (!endsInOp)
-            pos = '*' + pos;
+          pos = multiplyIfNoOperator(pos, true);
         }
 
         return parse(pre + solved.toString() + pos);
@@ -318,6 +317,18 @@ function parse(text) {
     return res;
 
   res = operatorBothSides(text, radix);
+  if (res != null)
+    return res;
+
+  res = operatorRight(text, 'asin');
+  if (res != null)
+    return res;
+
+  res = operatorRight(text, 'acos');
+  if (res != null)
+    return res;
+
+  res = operatorRight(text, 'atan');
   if (res != null)
     return res;
 
@@ -412,7 +423,7 @@ function updateScreen() {
   }
 }
 
-function writeOnScreen(text) {
+function writeOnScreen(text, ans=false) {
   if (text == 'DEL') {
     inputText = inputText.slice(0, -1);
   }
@@ -426,8 +437,16 @@ function writeOnScreen(text) {
     }
   }
   else {
+    if (clearOnInput) {
+      inputText = "";
+      if (ans) {
+        inputText = "Ans";
+      }
+    }
     inputText += text;
   }
+
+  clearOnInput = false;
 
   updateScreen();
 }
@@ -453,6 +472,8 @@ function execute() {
 
   fraction = false;
 
+  clearOnInput = true;
+
   updateScreen();
 }
 
@@ -468,14 +489,14 @@ function createFuncButton(label, func) {
   return td;
 }
 
-function createButton(label, text) {
+function createButton(label, text, ans=false) {
   return createFuncButton(label, () => {
-    writeOnScreen(text);
+    writeOnScreen(text, ans);
   });
 }
 
-function createSimpleButton(text) {
-  return createButton(text, text);
+function createSimpleButton(text, ans=false) {
+  return createButton(text, text, ans);
 }
 
 function makeLowerTable() {
@@ -501,7 +522,7 @@ function makeLowerTable() {
   tr.appendChild(createSimpleButton('1'));
   tr.appendChild(createSimpleButton('2'));
   tr.appendChild(createSimpleButton('3'));
-  tr.appendChild(createSimpleButton('+'));
+  tr.appendChild(createSimpleButton('+', true));
   tr.appendChild(createSimpleButton(minus));
   lowerTable.appendChild(tr);
 
@@ -519,7 +540,7 @@ function makeLowerTable() {
 function makeUpperTable() {
   const upperTable = document.getElementById('upper-button-table');
 
-  document.getElementById('rad-button').onclick = () => {
+  document.getElementById('btn-rad').onclick = () => {
     degrees = !degrees;
     updateScreen();
   }
@@ -528,7 +549,7 @@ function makeUpperTable() {
   tr.appendChild(createButton(superscript2, '^2'));
   tr.appendChild(createButton('<sup>x</sup>', '^'));
   tr.appendChild(createSimpleButton(sqrt));
-  tr.appendChild(createButton('<sup>x</sup>'+radix, radix));
+  tr.appendChild(createButton('<sup>x</sup>'+sqrt, radix));
   //upperTable.appendChild(tr);
 
   var tr = document.createElement('tr');
@@ -548,31 +569,50 @@ function makeUpperTable() {
   tr.appendChild(createSimpleButton(pi));
   tr.appendChild(createSimpleButton('('));
   tr.appendChild(createSimpleButton(')'));
-  tr.appendChild(createSimpleButton(','));
-  tr.appendChild(createSimpleButton('->'));
+  tr.appendChild(createSimpleButton('e'));
+  tr.appendChild(createButton('ans', 'Ans'));
   upperTable.appendChild(tr);
 
   var up = document.getElementById('btn-up');
   up.onclick = () => {
-    if (history.length <= 1)
+    if (history.length <= 0)
       return;
-    if (historyIndex == 0 && history[history.length - 1] != inputText) {
+
+    if (historyIndex == 0 && history[history.length - 1] != inputText && history.length > 0) {
       history.push(inputText);
     }
+
     historyIndex++;
+    if (historyIndex >= history.length)
+      historyIndex = history.length - 1;
+
     readFromHistory();
     updateScreen();
   }
 
   var down = document.getElementById('btn-down');
   down.onclick = () => {
-    if (history.length <= 1)
+    if (history.length <= 0)
       return;
     if (historyIndex <= 0)
       return;
+
     historyIndex--;
+    if (historyIndex < 0)
+      historyIndex = 0;
+
     readFromHistory();
     updateScreen();
+  }
+
+  document.getElementById('btn-asin').onclick = () => {
+    writeOnScreen('asin');
+  }
+  document.getElementById('btn-acos').onclick = () => {
+    writeOnScreen('acos');
+  }
+  document.getElementById('btn-atan').onclick = () => {
+    writeOnScreen('atan');
   }
 }
 
