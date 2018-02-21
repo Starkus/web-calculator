@@ -1,5 +1,5 @@
 let inputText = "";
-let resultText = "";
+let result = 0;
 const screen = document.getElementById('screen');
 
 const radix = '\u23B7';
@@ -19,6 +19,9 @@ const mathErrorMsg = "Math Error";
 
 /* Status */
 let degrees = true;
+let fraction = false;
+let history = [];
+let historyIndex = 0;
 
 
 /* Math functions */
@@ -37,7 +40,7 @@ function limitDecimals(n, digits) {
   return Math.round(n * tens) / tens;
 }
 
-function findFraction(x, error=0.00001) {
+function findFraction(x, error=0.0000001) {
   var n = Math.floor(x);
   x -= n;
   if (x < error) {
@@ -73,6 +76,32 @@ function findFraction(x, error=0.00001) {
   }
 }
 
+function needsScientificNotation(n) {
+  return n != 0 && (Math.abs(n > 100000) || Math.abs(n) < 0.00001);
+}
+
+function inScientificNotation(n) {
+  var E = 0;
+  if (n > 10) {
+    while (n >= 10) {
+      n /= 10;
+      E++;
+    }
+  }
+  else if (n < 1 && n > 0) {
+    while (n < 1) {
+      n *= 10;
+      E--;
+    }
+  }
+  return [n, E];
+}
+
+
+function plog(str) {
+  /* Uncomment to log parsing steps. */
+  //console.log(str);
+}
 
 function multiplyIfNoOperator(text, leftSide) {
   if (!text)
@@ -110,30 +139,32 @@ function operatorBothSides(text, op) {
 
     switch (op) {
       case '+':
-        console.log('adding: "' + pre + '" + "' + pos + '"');
+        plog('adding: "' + pre + '" + "' + pos + '"');
         return parse(pre) + parse(pos);
       case minus:
-        console.log('substracting: "' + pre + '" - "' + pos + '"');
+        plog('substracting: "' + pre + '" - "' + pos + '"');
         if (!pre)
           return -parse(pos);
         return parse(pre) - parse(pos);
       case '*':
-        console.log('multiplying: "' + pre + '" * "' + pos + '"');
+        plog('multiplying: "' + pre + '" * "' + pos + '"');
         return parse(pre) * parse(pos);
       case '/':
-        console.log('dividing: "' + pre + '" / "' + pos + '"');
+        plog('dividing: "' + pre + '" / "' + pos + '"');
         var divisor = parse(pos);
         if (divisor == 0)
           return mathErrorMsg;
         return parse(pre) / divisor;
       case '^':
-        console.log('power: "' + pre + '" ^ "' + pos + '"');
+        plog('power: "' + pre + '" ^ "' + pos + '"');
         return Math.pow(parse(pre), parse(pos));
       case '%':
-        console.log('module: "' + pre + '" % "' + pos + '"');
+        plog('module: "' + pre + '" % "' + pos + '"');
         return mod(parse(pre), parse(pos));
+      case 'E':
+        return parse(pre) * Math.pow(10, parse(pos));
       case radix:
-        console.log('root: "' + pre + '" radix "' + pos + '"');
+        plog('root: "' + pre + '" radix "' + pos + '"');
         return Math.pow(parse(pos), 1 / parse(pre));
       default:
         return null;
@@ -146,9 +177,9 @@ function operatorRight(text, op) {
   var index = text.indexOf(op);
   if (index != -1) {
     var pre = text.slice(0, index);
-    console.log(text);
+    plog(text);
     var pos = text.slice(index + op.length);
-    console.log(pos);
+    plog(pos);
 
     var arg = parse(pos);
     var angle = arg;
@@ -190,7 +221,7 @@ function operatorRight(text, op) {
 }
 
 function parse(text) {
-  console.log('parsing: "' + text + '"');
+  plog('parsing: "' + text + '"');
   var res;
 
   /* Pi */
@@ -218,8 +249,9 @@ function parse(text) {
       {
         var inside = ss.slice(0, i);
         var pos = ss.slice(i + 1);
-        console.log('inside: ' + inside + ', pre: ' + pre + ', pos: ' + pos);
+        plog('inside: ' + inside + ', pre: ' + pre + ', pos: ' + pos);
         var solved = parse(inside);
+        plog('parenthesis result: ' + solved);
 
         // Functions here?
 
@@ -281,6 +313,10 @@ function parse(text) {
   if (res != null)
     return res;
 
+  res = operatorBothSides(text, 'E');
+  if (res != null)
+    return res;
+
   res = operatorBothSides(text, radix);
   if (res != null)
     return res;
@@ -334,6 +370,23 @@ function updateScreen() {
     line++;
   }
 
+  if (fraction) {
+    var fr = findFraction(result);
+    resultText = fr[0].toString() + ',' + fr[1].toString();
+  }
+  else if (needsScientificNotation(result)) {
+    sciNot = inScientificNotation(result);
+    var e = sciNot[1].toString();
+    resultText = sciNot[0].toString().slice(0,11 - e.length) + 'E' + sciNot[1].toString();
+  }
+  else {
+    var r = result;
+    
+    if (!isNaN(result))
+      r = limitDecimals(r, 12);
+    resultText = r.toString();
+  }
+
   var resultNofDots = resultText.length - resultText.replace(/\./g, '').length;
   resultText = resultText.slice(0, 11 + resultNofDots);
   var emptySlots = 13 - resultText.length + resultNofDots;
@@ -371,12 +424,26 @@ function writeOnScreen(text) {
   updateScreen();
 }
 
-function execute() {
-  var result = parse(inputText);
-  if (!isNaN(result))
-    result = limitDecimals(result, 7);
+function readFromHistory() {
+  var entry = history[history.length - 1 - historyIndex];
+  inputText = entry;
+}
 
-  resultText = result.toString();
+function execute() {
+  result = parse(inputText);
+
+  // Log input to history
+  if (history[history.length-1] != inputText) {
+    history.push(inputText);
+    // Limit to 10 newest entries
+    while (history.length > 10)
+      history.shift();
+  }
+  historyIndex = 0;
+  //console.log(history);
+
+  fraction = false;
+
   updateScreen();
 }
 
@@ -432,7 +499,7 @@ function makeLowerTable() {
   tr = document.createElement('tr');
   tr.appendChild(createSimpleButton('.'));
   tr.appendChild(createSimpleButton('0'));
-  tr.appendChild(createSimpleButton('EXP'));
+  tr.appendChild(createButton('EXP', 'E'));
   tr.appendChild(createButton('(-)', '-'));
   const exeBtn = createFuncButton('=', () => execute());
   exeBtn.childNodes[0].id = "execute-btn";
@@ -466,9 +533,7 @@ function makeUpperTable() {
 
   var tr = document.createElement('tr');
   tr.appendChild(createFuncButton('d/c', () => {
-    var n = Number(resultText);
-    var fraction = findFraction(n);
-    resultText = fraction[0].toString() + ',' + fraction[1].toString();
+    fraction = !fraction;
     updateScreen();
   }));
   tr.appendChild(createSimpleButton(pi));
@@ -477,6 +542,29 @@ function makeUpperTable() {
   tr.appendChild(createSimpleButton(','));
   tr.appendChild(createSimpleButton('->'));
   upperTable.appendChild(tr);
+
+  var up = document.getElementById('btn-up');
+  up.onclick = () => {
+    if (history.length <= 1)
+      return;
+    if (historyIndex == 0 && history[history.length - 1] != inputText) {
+      history.push(inputText);
+    }
+    historyIndex++;
+    readFromHistory();
+    updateScreen();
+  }
+
+  var down = document.getElementById('btn-down');
+  down.onclick = () => {
+    if (history.length <= 1)
+      return;
+    if (historyIndex <= 0)
+      return;
+    historyIndex--;
+    readFromHistory();
+    updateScreen();
+  }
 }
 
 updateScreen();
