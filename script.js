@@ -514,8 +514,8 @@ function makeLowerTable() {
   tr.appendChild(createSimpleButton('4'));
   tr.appendChild(createSimpleButton('5'));
   tr.appendChild(createSimpleButton('6'));
-  tr.appendChild(createButton(mult, '*'));
-  tr.appendChild(createButton(div, '/'));
+  tr.appendChild(createButton(mult, '*', true));
+  tr.appendChild(createButton(div, '/', true));
   lowerTable.appendChild(tr);
 
   tr = document.createElement('tr');
@@ -523,13 +523,13 @@ function makeLowerTable() {
   tr.appendChild(createSimpleButton('2'));
   tr.appendChild(createSimpleButton('3'));
   tr.appendChild(createSimpleButton('+', true));
-  tr.appendChild(createSimpleButton(minus));
+  tr.appendChild(createSimpleButton(minus, true));
   lowerTable.appendChild(tr);
 
   tr = document.createElement('tr');
   tr.appendChild(createSimpleButton('.'));
   tr.appendChild(createSimpleButton('0'));
-  tr.appendChild(createButton('EXP', 'E'));
+  tr.appendChild(createButton('EXP', 'E', true));
   tr.appendChild(createButton('(-)', '-'));
   const exeBtn = createFuncButton('=', () => execute());
   exeBtn.childNodes[0].id = "execute-btn";
@@ -546,14 +546,13 @@ function makeUpperTable() {
   }
 
   var tr = upperTable.rows[upperTable.rows.length - 1];
-  tr.appendChild(createButton(superscript2, '^2'));
-  tr.appendChild(createButton('<sup>x</sup>', '^'));
+  tr.appendChild(createButton(superscript2, '^2', true));
+  tr.appendChild(createButton('<sup>x</sup>', '^', true));
   tr.appendChild(createSimpleButton(sqrt));
   tr.appendChild(createButton('<sup>x</sup>'+sqrt, radix));
-  //upperTable.appendChild(tr);
 
   var tr = document.createElement('tr');
-  tr.appendChild(createSimpleButton('%'));
+  tr.appendChild(createSimpleButton('%', true));
   tr.appendChild(createButton('log', 'log'));
   tr.appendChild(createButton('ln', 'ln'));
   tr.appendChild(createButton('sin', 'sin'));
