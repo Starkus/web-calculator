@@ -151,3 +151,39 @@ table button:hover {
     height: 30px;
   }
 }
+
+@media (max-height: 830px) {
+  #header {
+    display: none;
+  }
+}
+
+@media (min-aspect-ratio: 8/10) and (max-height: 830px) {
+  #calculator-box {
+    width: 60vh;
+    max-width: initial;
+    padding: 4.2vh 4vh 4.2vh 4vh;
+  }
+  .screen {
+    font-size: 4vh;
+  }
+  #screen-box {
+    height: 20vh;
+    /*padding: 20px 60px 20px 60px;*/
+    padding: 2vh 10.5vh 0 10.5vh;
+  }
+  #upper-button-table button {
+    height: 5vh;
+    min-height: initial;
+    font-size: 2.4vh;
+  }
+  #lower-button-table button {
+    height: 8vh;
+    min-height: initial;
+    font-size: 2.7vh;
+  }
+  #arrows-cell button {
+    height: 3vh;
+    min-height: initial;
+  }
+}
