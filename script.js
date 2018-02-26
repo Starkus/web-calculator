@@ -203,15 +203,24 @@ function operatorRight(text, op) {
         break;
       case 'asin':
         res = Math.asin(arg);
-        if (degrees) res /= toRadians;
+        if (typeof isNaN(res))
+          res = mathErrorMsg;
+        else if (degrees)
+          res /= toRadians;
         break;
       case 'acos':
         res = Math.acos(arg);
-        if (degrees) res /= toRadians;
+        if (typeof isNaN(res))
+          res = mathErrorMsg;
+        else if (degrees)
+          res /= toRadians;
         break;
       case 'atan':
         res = Math.atan(arg);
-        if (degrees) res /= toRadians;
+        if (typeof isNaN(res))
+          res = mathErrorMsg;
+        else if (degrees)
+          res /= toRadians;
         break;
       case 'log':
         res = Math.log(arg) / Math.LN10;
@@ -220,7 +229,10 @@ function operatorRight(text, op) {
         res = Math.log(arg);
         break;
       case sqrt:
-        res = Math.sqrt(arg);
+        if (arg < 0)
+          res = mathErrorMsg;
+        else
+          res = Math.sqrt(arg);
         break;
       default:
         res = null;
@@ -356,7 +368,14 @@ function parse(text) {
   if (res != null)
     return res;
 
-  return Number(text);
+  plog('Converting to number: "' + text + '"');
+  var num = Number(text);
+  if (isNaN(num)) {
+    plog('Failed converting to a number!');
+    return syntaxErrorMsg;
+  }
+
+  return num;
 }
 
 function updateScreen() {
