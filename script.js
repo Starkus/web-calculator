@@ -203,21 +203,21 @@ function operatorRight(text, op) {
         break;
       case 'asin':
         res = Math.asin(arg);
-        if (typeof isNaN(res))
+        if (isNaN(res))
           res = mathErrorMsg;
         else if (degrees)
           res /= toRadians;
         break;
       case 'acos':
         res = Math.acos(arg);
-        if (typeof isNaN(res))
+        if (isNaN(res))
           res = mathErrorMsg;
         else if (degrees)
           res /= toRadians;
         break;
       case 'atan':
         res = Math.atan(arg);
-        if (typeof isNaN(res))
+        if (isNaN(res))
           res = mathErrorMsg;
         else if (degrees)
           res /= toRadians;
